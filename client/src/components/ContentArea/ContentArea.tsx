@@ -1,3 +1,5 @@
+"use client";
+
 import HelpIcon from "@/assets/icons/helpIcon.svg";
 import Graphic1 from "@/assets/icons/graphic1.svg";
 import Graphic2 from "@/assets/icons/graphic2.svg";
@@ -8,10 +10,13 @@ import FilterIcon from "@/assets/icons/filterIcon.svg";
 import ShareIcon from "@/assets/icons/shareIcon.svg";
 import SearchIcon from "@/assets/icons/searchIcon.svg";
 import CreateTaskIcon from "@/assets/icons/addIcon.svg";
-
-import { PrimaryBtn } from "../Button";
 import TasksArea from "../TasksArea";
+import { useAppDispatch } from "@/lib/hooks";
+import { toggleModal } from "@/lib/slices/taskModal";
+import { PrimaryBtn } from "../Button";
+
 export default function ContentArea() {
+  const dispatch = useAppDispatch();
   const cardsData = [
     {
       id: 1,
@@ -35,6 +40,10 @@ export default function ContentArea() {
       imgSrc: Graphic3?.src,
     },
   ];
+
+  function handleTaskModal() {
+    dispatch(toggleModal());
+  }
 
   return (
     <div className="w-full p-8 relative">
@@ -90,7 +99,7 @@ export default function ContentArea() {
             <span>Share</span>
             <img src={ShareIcon?.src} alt="" />
           </div>
-          <PrimaryBtn title="Create new" type="button" icon={CreateTaskIcon} />
+          <PrimaryBtn onClick={handleTaskModal} title="Create new" type="button" icon={CreateTaskIcon} />
         </div>
       </div>
       <TasksArea />

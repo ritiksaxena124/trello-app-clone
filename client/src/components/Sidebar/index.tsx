@@ -13,12 +13,23 @@ import DownloadIcon from "@/assets/icons/downloadIcon.svg";
 
 import { PrimaryBtn } from "../Button";
 import { useRouter } from "next/navigation";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { toggleModal } from "@/lib/slices/taskModal";
 
 export default function Sidebar() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
   function handleLogout() {
     router.push("/login");
   }
+
+  function toggleTaskModal() {
+    dispatch(toggleModal());
+  }
+
+  console.log(useAppSelector((store) => store.taskModal.isOpen));
+
   return (
     <div className="w-72 relative basis-1/5 min-h-screen bg-white px-4 py-6 space-y-6 border-r border-[#DDDDDD] flex flex-col justify-between overflow-hidden">
       <div className="space-y-6">
@@ -76,7 +87,12 @@ export default function Sidebar() {
             />
             <p>Analytics</p>
           </div>
-          <PrimaryBtn type="button" title="Create new task" icon={CreateIcon} />
+          <PrimaryBtn
+            onClick={toggleTaskModal}
+            type="button"
+            title="Create new task"
+            icon={CreateIcon}
+          />
         </div>
       </div>
       <div className="flex items-center justify-center gap-1 rounded-md bg-[#F3F3F3] py-3 px-2 cursor-pointer">

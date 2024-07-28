@@ -1,6 +1,6 @@
-export default function PrimaryBtn({ title, type, icon }) {
+export default function PrimaryBtn({ title, type, icon, onClick }) {
   return (
-    <div className="bg-gradient-btn-primary rounded-md text-sm text-white font-medium p-3 flex items-center gap-2 justify-center cursor-pointer">
+    <div onClick={onClick} className="bg-gradient-btn-primary rounded-md text-sm text-white font-medium p-3 flex items-center gap-2 justify-center cursor-pointer">
       <button type={type}>{title}</button>
       {icon && (
         <span>

@@ -9,15 +9,31 @@ import {
   CalendarIcon,
   PlusIcon,
 } from "@/assets/icons";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { toggleModal } from "@/lib/slices/taskModal";
 
 export default function TaskModal() {
+  const dispatch = useAppDispatch();
+  const isOpen = useAppSelector((store) => store.taskModal.isOpen);
+  function closeTaskModal() {
+    dispatch(toggleModal());
+  }
   return (
     <>
-      <section className="absolute top-0 left-0 w-full h-full z-10 bg-black/50"></section>
-      <section className="fixed w-full max-w-xl right-0 top-0 h-screen bg-white z-20 p-6">
+      <section
+        onClick={closeTaskModal}
+        className={`${
+          isOpen ? "opacity-1" : "hidden"
+        } absolute top-0 left-0 w-full h-full z-10 bg-black/50`}
+      ></section>
+      <section
+        className={`fixed w-full max-w-xl right-0 top-0 h-screen bg-white z-20 p-6 ${
+          isOpen ? "translate-x-0" : "translate-x-[100%]"
+        }`}
+      >
         <div className="flex justify-between mb-6 items-center">
           <div className="flex items-center gap-3">
-            <span className="cursor-pointer">
+            <span onClick={closeTaskModal} className="cursor-pointer">
               <img
                 src={CloseIcon?.src}
                 alt="close task modal"

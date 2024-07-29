@@ -3,7 +3,7 @@ import { DropDownIcon, ClockIcon, PlusIcon } from "@/assets/icons";
 import { tasksData } from "@/data/tasksData";
 import TaskList from "./TaskList";
 import { useAppDispatch } from "@/lib/hooks";
-import { toggleModal } from "@/lib/slices/taskModal";
+import { toggleModal } from "@/lib/slices/taskModalSlice";
 
 export default function TasksArea() {
   const dispatch = useAppDispatch();

@@ -2,6 +2,7 @@
 import FormField from "@/components/FormField";
 import { PrimaryBtn } from "@/components/Button";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useRouter } from "next/navigation";
 
 interface FormFields {
   email?: string;
@@ -9,6 +10,8 @@ interface FormFields {
 }
 
 export default function Page() {
+  const router = useRouter();
+
   const initialValues: FormFields = {
     email: "",
     password: "",
@@ -22,14 +25,28 @@ export default function Page() {
       errors.email = "Invalid email address";
     }
     if (!values.password) {
-        errors.password = "Password is required";
+      errors.password = "Password is required";
     }
 
     return errors;
   }
 
-  function handleSubmit(values: FormFields) {
-    console.log(values);
+  async function handleSubmit(values: FormFields) {
+    const res = await fetch("http://localhost:9081/api/v1/auth/login", {
+      method: "POST",
+      body: JSON.stringify(values, null, 2),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+    if (data.status == 401) {
+      alert("Invalid credentials");
+    } else {
+      localStorage.setItem("token", data.token);
+      router.push("/dashboard");
+    }
   }
 
   return (
@@ -42,7 +59,9 @@ export default function Page() {
           <Formik
             initialValues={initialValues}
             validate={handleValidate}
-            onSubmit={handleSubmit}
+            onSubmit={(values) => {
+              handleSubmit(values);
+            }}
           >
             <Form>
               <FormField type="email" name="email" placeholder="Your email" />
@@ -57,7 +76,10 @@ export default function Page() {
         </div>
         <p className="text-center text-[#606060]">
           Don&apos;t have an account? Create a{" "}
-          <a href="/registration" className="text-blue-700 cursor-pointer">new account</a>.
+          <a href="/registration" className="text-blue-700 cursor-pointer">
+            new account
+          </a>
+          .
         </p>
       </div>
     </div>

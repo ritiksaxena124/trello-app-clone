@@ -10,7 +10,7 @@ import {
   PlusIcon,
 } from "@/assets/icons";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import { toggleModal } from "@/lib/slices/taskModal";
+import { toggleModal } from "@/lib/slices/taskModalSlice";
 
 export default function TaskModal() {
   const dispatch = useAppDispatch();

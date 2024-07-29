@@ -12,7 +12,7 @@ import SearchIcon from "@/assets/icons/searchIcon.svg";
 import CreateTaskIcon from "@/assets/icons/addIcon.svg";
 import TasksArea from "../TasksArea";
 import { useAppDispatch } from "@/lib/hooks";
-import { toggleModal } from "@/lib/slices/taskModal";
+import { toggleModal } from "@/lib/slices/taskModalSlice";
 import { PrimaryBtn } from "../Button";
 
 export default function ContentArea() {

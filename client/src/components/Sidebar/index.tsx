@@ -26,15 +26,12 @@ export default function Sidebar() {
     });
     const data = await res.json();
 
-    console.log(data);
     router.push("/login");
   }
 
   function toggleTaskModal() {
     dispatch(toggleModal());
   }
-
-  console.log(useAppSelector((store) => store.taskModal.isOpen));
 
   return (
     <div className="w-72 relative basis-1/5 min-h-screen bg-white px-4 py-6 space-y-6 border-r border-[#DDDDDD] flex flex-col justify-between overflow-hidden">

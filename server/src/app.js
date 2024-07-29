@@ -3,6 +3,8 @@ import express from "express";
 import authRouter from "./routers/authRouter.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import connectDB from "./db/index.js";
+
 dotenv.config();
 
 const app = express();
@@ -22,11 +24,17 @@ app.use("/api/v1/auth", authRouter);
 
 const serverStart = async () => {
   try {
+    await connectDB();
+    app.on("error", (err) => {
+      console.error("Error: ", err);
+      throw err;
+    });
     app.listen(port, (req, res) => {
       console.log(`Server is running on http://localhost:${port}`);
     });
   } catch (err) {
-    console.log(err);
+    console.log("Failed to start the server", err);
+    throw err;
   }
 };
 

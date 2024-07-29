@@ -15,7 +15,7 @@ export default function PrimaryBtn({
     <button
       onClick={onClick}
       type={type}
-      className="w-full bg-gradient-btn-primary rounded-md text-sm text-white font-medium p-3 flex items-center gap-2 justify-center cursor-pointer"
+      className="w-full flex-1 bg-gradient-btn-primary rounded-md text-sm text-white font-medium p-3 flex items-center gap-2 justify-center cursor-pointer"
     >
       <span>{title}</span>
       {icon && (

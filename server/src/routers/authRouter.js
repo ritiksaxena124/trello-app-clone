@@ -79,6 +79,7 @@ router.post("/register", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
+  res.clearCookie("token")
   res.json({ message: "Logged out successfully" });
 });
 export default router;

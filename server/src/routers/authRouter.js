@@ -5,10 +5,33 @@ import User from "../models/userModel.js";
 
 const router = express.Router();
 
-router.post("/login", (req, res) => {
+router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  res.send("Login");
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user) {
+    return res.status(401).json({
+      message: "Incorrect credentials",
+      status: 401,
+    });
+  }
+
+  const blob = bcrypt.compare(password, user.password);
+
+  if (!blob) {
+    return res.status(401).json({
+      message: "Incorrect credentials",
+      status: 401,
+    });
+  }
+
+  res.status(201).json({
+    message: "User loggedIn",
+    status: 201,
+  });
 });
 
 router.post("/register", (req, res) => {

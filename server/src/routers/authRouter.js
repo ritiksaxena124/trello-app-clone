@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import User from "../models/userModel.js";
 
 const router = express.Router();
 
@@ -18,14 +19,27 @@ router.post("/register", (req, res) => {
       throw err;
     }
 
-    bcrypt.hash(password, salt, (err, result) => {
+    bcrypt.hash(password, salt, async (err, result) => {
       if (err) {
         console.log("Error hashing password", err);
         throw err;
       }
       // logic to create a user in database goes here
+      const user = await User.create({
+        fullName,
+        email,
+        password: result,
+      });
+
+      if (!user) {
+        res.status(401).json({
+          message: "Unable to register user.",
+          status: 401,
+        });
+      }
+
       // create a jwt token
-      const token = jwt.sign({}, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
       const options = {
         httpOnly: true,
@@ -42,7 +56,6 @@ router.post("/register", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  res.clearCookie("token");
   res.json({ message: "Logged out successfully" });
 });
 export default router;

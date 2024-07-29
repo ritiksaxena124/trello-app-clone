@@ -47,6 +47,8 @@ export default function Page() {
     const data = await res.json();
     if (data.status === 201) {
       router.push("/dashboard");
+    } else {
+      router.push("/registration");
     }
   }
 

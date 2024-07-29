@@ -20,7 +20,13 @@ export default function Sidebar() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  function handleLogout() {
+  async function handleLogout() {
+    const res = await fetch("http://localhost:9081/api/v1/auth/logout", {
+      credentials: "include",
+    });
+    const data = await res.json();
+
+    console.log(data);
     router.push("/login");
   }
 

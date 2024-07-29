@@ -19,7 +19,7 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const blob = bcrypt.compare(password, user.password);
+  const blob = await bcrypt.compare(password, user.password);
 
   if (!blob) {
     return res.status(401).json({
@@ -28,9 +28,12 @@ router.post("/login", async (req, res) => {
     });
   }
 
+  const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
+
   res.status(201).json({
     message: "User loggedIn",
     status: 201,
+    token
   });
 });
 

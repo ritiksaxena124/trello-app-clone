@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import taskModal from "./slices/taskModal";
+import taskModalSlice from "./slices/taskModalSlice";
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      taskModal: taskModal,
+      taskModal: taskModalSlice,
     },
   });
 };

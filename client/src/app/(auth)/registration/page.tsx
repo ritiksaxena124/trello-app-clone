@@ -46,6 +46,7 @@ export default function Page() {
     });
     const data = await res.json();
     if (data.status === 201) {
+      localStorage.setItem("token", data.token);
       router.push("/dashboard");
     } else {
       router.push("/registration");
@@ -70,7 +71,7 @@ export default function Page() {
             <FormField type="text" name="fullName" placeholder="Full name" />
             <FormField type="email" name="email" placeholder="Your email" />
             <FormField type="password" name="password" placeholder="Password" />
-            <PrimaryBtn icon="" type="submit" title="Signup" />
+            <PrimaryBtn type="submit" title="Signup" />
           </Form>
         </Formik>
         <p className="text-center text-[#606060]">

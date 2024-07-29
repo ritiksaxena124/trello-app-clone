@@ -13,7 +13,7 @@ import DownloadIcon from "@/assets/icons/downloadIcon.svg";
 
 import { PrimaryBtn } from "../Button";
 import { useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { useAppDispatch } from "@/lib/hooks";
 import { toggleModal } from "@/lib/slices/taskModal";
 
 export default function Sidebar() {
@@ -21,10 +21,10 @@ export default function Sidebar() {
   const dispatch = useAppDispatch();
 
   async function handleLogout() {
+    localStorage.removeItem("token");
     const res = await fetch("http://localhost:9081/api/v1/auth/logout", {
       credentials: "include",
     });
-    const data = await res.json();
 
     router.push("/login");
   }

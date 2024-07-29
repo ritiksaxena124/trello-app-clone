@@ -14,7 +14,7 @@ import DownloadIcon from "@/assets/icons/downloadIcon.svg";
 import { PrimaryBtn } from "../Button";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/hooks";
-import { toggleModal } from "@/lib/slices/taskModal";
+import { toggleModal } from "@/lib/slices/taskModalSlice";
 
 export default function Sidebar() {
   const router = useRouter();

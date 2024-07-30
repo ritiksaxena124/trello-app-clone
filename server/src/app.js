@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
 import authRouter from "./routers/authRouter.js";
+import userRouter from "./routers/userRouter.js";
+
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./db/index.js";
@@ -21,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
 
 const serverStart = async () => {
   try {

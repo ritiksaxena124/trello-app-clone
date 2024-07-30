@@ -2,6 +2,8 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
+import { sampleData } from "../data/data.js";
+import { TasksData } from "../models/tasksModel.js";
 
 const router = express.Router();
 
@@ -28,12 +30,12 @@ router.post("/login", async (req, res) => {
     });
   }
 
-  const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
   res.status(201).json({
     message: "User loggedIn",
     status: 201,
-    token
+    token,
   });
 });
 
@@ -50,11 +52,15 @@ router.post("/register", (req, res) => {
         console.log("Error hashing password", err);
         throw err;
       }
+
+      const tasksData = await TasksData.insertMany(sampleData);
+
       // logic to create a user in database goes here
       const user = await User.create({
         fullName,
         email,
         password: result,
+        tasksData: tasksData.map((tasks) => tasks._id),
       });
 
       if (!user) {
@@ -82,7 +88,7 @@ router.post("/register", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  res.clearCookie("token")
+  res.clearCookie("token");
   res.json({ message: "Logged out successfully" });
 });
 export default router;

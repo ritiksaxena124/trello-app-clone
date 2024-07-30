@@ -15,7 +15,7 @@ import { useAppDispatch } from "@/lib/hooks";
 import { toggleModal } from "@/lib/slices/taskModalSlice";
 import { PrimaryBtn } from "../Button";
 
-export default function ContentArea() {
+export default function ContentArea({user}) {
   const dispatch = useAppDispatch();
   const cardsData = [
     {
@@ -48,7 +48,7 @@ export default function ContentArea() {
   return (
     <div className="w-full p-8 relative">
       <div className="flex justify-between items-center">
-        <h1 className="text-[48px] font-semibold">Good morning, Joe!</h1>
+        <h1 className="text-[48px] font-semibold">Good morning, {user?.fullName.split(" ")[0]}!</h1>
         <div className="flex gap-2 items-center">
           <span>Help & feedback</span>
           <img src={HelpIcon?.src} alt="help icon" />
@@ -102,7 +102,7 @@ export default function ContentArea() {
           <PrimaryBtn onClick={handleTaskModal} title="Create new" type="button" icon={CreateTaskIcon} />
         </div>
       </div>
-      <TasksArea />
+      <TasksArea tasksData = {user.tasksData}/>
     </div>
   );
 }

@@ -1,19 +1,20 @@
 "use client";
 import { DropDownIcon, ClockIcon, PlusIcon } from "@/assets/icons";
-import { tasksData } from "@/data/tasksData";
+// import { tasksData } from "@/data/tasksData";
 import TaskList from "./TaskList";
 import { useAppDispatch } from "@/lib/hooks";
 import { toggleModal } from "@/lib/slices/taskModalSlice";
 
-export default function TasksArea() {
+export default function TasksArea({tasksData}) {
+  console.log(tasksData)
   const dispatch = useAppDispatch();
   function handleTaskModal() {
     dispatch(toggleModal());
   }
   return (
     <div className="mt-6 rounded-lg bg-white w-full p-4 flex gap-6">
-      {tasksData.map((tasks, index) => (
-        <div key={index} className="flex-1">
+      {tasksData.map((tasks) => (
+        <div key={tasks._id} className="flex-1">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xl font-medium text-[#606060]">
               {tasks.status}

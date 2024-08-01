@@ -32,10 +32,16 @@ router.post("/login", async (req, res) => {
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res.cookie("token", token, options);
+
   res.status(201).json({
     message: "User loggedIn",
     status: 201,
-    token,
   });
 });
 
@@ -80,7 +86,6 @@ router.post("/register", (req, res) => {
       res.cookie("token", token, options);
       res.status(201).json({
         message: "User registered successfully!",
-        token,
         status: 201,
       });
     });

@@ -46,7 +46,6 @@ export default function Page() {
     });
     const data = await res.json();
     if (data.status === 201) {
-      localStorage.setItem("token", data.token);
       router.push("/login");
     } else {
       router.push("/registration");

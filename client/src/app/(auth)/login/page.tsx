@@ -34,6 +34,7 @@ export default function Page() {
   async function handleSubmit(values: FormFields) {
     const res = await fetch("http://localhost:9081/api/v1/auth/login", {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify(values, null, 2),
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +45,6 @@ export default function Page() {
     if (data.status == 401) {
       alert("Invalid credentials");
     } else {
-      localStorage.setItem("token", data.token);
       router.push("/dashboard");
     }
   }

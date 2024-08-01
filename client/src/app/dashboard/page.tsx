@@ -16,18 +16,18 @@ export default function Page() {
         credentials: "include",
       });
       const data = await res.json();
-      console.log(data)
-      setUser(data.user);
+      if (data.status == 401) {
+        return router.push("/login");
+      }
+      if (data.status == 201) {
+        setUser(data.user);
+      }
     }
 
     getUserData();
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return router.push("/login");
-    }
   }, []);
 
-  if(!user){
+  if (!user) {
     return;
   }
 

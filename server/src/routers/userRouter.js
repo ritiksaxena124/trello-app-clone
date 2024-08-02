@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 const router = express.Router();
 
 router.get("/getdata", async (req, res) => {
-  const token = req.headers?.cookie.replace("token=", "");
+  const token = req.headers.cookie?.replace("token=", "");
   if (!token) {
     return res.status(401).json({
       msg: "Unauthorized",

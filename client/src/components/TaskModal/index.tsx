@@ -1,7 +1,9 @@
+"use client";
 import CloseIcon from "@/assets/icons/closeIcon.svg";
 import FullScreenIcon from "@/assets/icons/fullScreenIcon.svg";
 import ShareIcon from "@/assets/icons/shareIcon.svg";
 import FavoriteIcon from "@/assets/icons/favoriteIcon.svg";
+import React, { SyntheticEvent, useState } from "react";
 import {
   StatusIcon,
   PriorityIcon,
@@ -11,13 +13,76 @@ import {
 } from "@/assets/icons";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { toggleModal } from "@/lib/slices/taskModalSlice";
+import { TaskDetails } from "@/interfaces";
+import PriorityTag from "../PriorityTag";
 
 export default function TaskModal() {
+  const [toggleDropdown, setToggleDropdown] = useState<{
+    status: boolean;
+    priority: boolean;
+  }>({
+    status: false,
+    priority: false,
+  });
+  const [taskDetails, setTaskDetails] = useState<TaskDetails>({
+    title: "",
+    description: "",
+    status: "Todo",
+    priority: "Low",
+  });
+
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((store) => store.taskModal.isOpen);
+
   function closeTaskModal() {
     dispatch(toggleModal());
   }
+  function handleToggleDropdown(element: keyof typeof toggleDropdown) {
+    setToggleDropdown((prev) => ({
+      ...prev,
+      [element]: !prev[element],
+    }));
+  }
+
+  function handleTaskDetails(
+    name: string,
+    value: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    setTaskDetails((prev) => ({
+      ...prev,
+      [name]: value ? value : e.target.value,
+    }));
+
+    if (name == "status" || name == "priority") {
+      setToggleDropdown(() => ({
+        status: false,
+        priority: false,
+      }));
+    }
+  }
+
+  async function handleCreateTask() {
+    if (!taskDetails.title) {
+      alert("Title cannot be empty");
+      return;
+    }
+
+    const res = await fetch("http://localhost:9081/api/v1/task/create", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(taskDetails),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await res.json();
+    console.log(data);
+  }
+
+  console.log(taskDetails);
+
   return (
     <>
       <section
@@ -49,12 +114,14 @@ export default function TaskModal() {
             </span>
           </div>
           <div className="flex gap-3 items-center">
+            <div onClick={handleCreateTask} className="flex gap-2 items-center py-2 px-4 rounded-md cursor-pointer text-white bg-gradient-to-b from-[#3A3A3A] to-[#202020]">
+              <button>Create</button>
+              <img src={PlusIcon?.src} alt="create icon" className="invert" />
+            </div>
             <div className="flex gap-2 items-center bg-[#f3f3f3] py-2 px-4 rounded-md text-[#666] cursor-pointer">
-              <button>Share</button>
               <img src={ShareIcon?.src} alt="share icon" />
             </div>
             <div className="flex gap-2 items-center bg-[#f3f3f3] py-2 px-4 rounded-md text-[#666] cursor-pointer">
-              <button>Favorite</button>
               <img src={FavoriteIcon?.src} alt="share icon" />
             </div>
           </div>
@@ -63,16 +130,128 @@ export default function TaskModal() {
           type="text"
           placeholder="Title"
           className="text-[48px] outline-none font-medium"
+          name="title"
+          value={taskDetails.title}
+          onChange={(e) => handleTaskDetails("title", "", e)}
         />
         <div className="py-6 space-y-5">
-          <div className="flex items-center gap-2 text-[#666]">
-            <img src={StatusIcon?.src} alt="" className="w-6 h-6" />
-            <span className="text-base">Status</span>
+          {/* Status */}
+          <div className="flex items-center">
+            <div className="flex grow items-center gap-2 text-[#666]">
+              <img src={StatusIcon?.src} alt="" className="w-6 h-6" />
+              <span className="text-base">Status</span>
+            </div>
+
+            <div className="relative grow max-w-44">
+              <button
+                className="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button"
+                onClick={() => {
+                  handleToggleDropdown("status");
+                  setToggleDropdown((prev) => ({
+                    ...prev,
+                    priority: false,
+                  }));
+                }}
+              >
+                {taskDetails.status}
+              </button>
+
+              <div
+                className={`absolute z-20 ${
+                  toggleDropdown.status ? "h-fit" : "hidden"
+                } mt-2 bg-white divide-y w-full divide-gray-100 rounded-lg shadow dark:bg-gray-700`}
+              >
+                <ul
+                  className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownDefaultButton"
+                >
+                  <li
+                    onClick={(e) => handleTaskDetails("status", "Todo", e)}
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Todo
+                  </li>
+                  <li
+                    onClick={(e) =>
+                      handleTaskDetails("status", "In Progress", e)
+                    }
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    In Progress
+                  </li>
+                  <li
+                    onClick={(e) =>
+                      handleTaskDetails("status", "Under Review", e)
+                    }
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Under Review
+                  </li>
+                  <li
+                    onClick={(e) => handleTaskDetails("status", "Finished", e)}
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Finished
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-2 text-[#666]">
-            <img src={PriorityIcon?.src} alt="" className="w-6 h-6" />
-            <span className="text-base">Priority</span>
+
+          {/* Priority */}
+          <div className="flex items-center">
+            <div className="flex grow items-center gap-2 text-[#666]">
+              <img src={PriorityIcon?.src} alt="" className="w-6 h-6" />
+              <span className="text-base">Priority</span>
+            </div>
+
+            <div className="relative grow max-w-44">
+              <PriorityTag
+                title={taskDetails.priority}
+                onClick={() => {
+                  handleToggleDropdown("priority");
+                  setToggleDropdown((prev) => ({
+                    ...prev,
+                    status: false,
+                  }));
+                }}
+              />
+
+              <div
+                className={`absolute z-20 ${
+                  toggleDropdown.priority ? "h-fit" : "hidden"
+                } mt-2 bg-white divide-y w-full divide-gray-100 rounded-lg shadow dark:bg-gray-700`}
+              >
+                <ul
+                  className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownDefaultButton"
+                >
+                  <li
+                    onClick={(e) => {
+                      handleTaskDetails("priority", "Urgent", e);
+                    }}
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Urgent
+                  </li>
+                  <li
+                    onClick={(e) => handleTaskDetails("priority", "Medium", e)}
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Medium
+                  </li>
+                  <li
+                    onClick={(e) => handleTaskDetails("priority", "Low", e)}
+                    className="block px-4 py-2 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-600 dark:hover:text-white"
+                  >
+                    Low
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
+
           <div className="flex items-center gap-2 text-[#666]">
             <img src={CalendarIcon?.src} alt="" className="w-6 h-6" />
             <span className="text-base">Deadline</span>

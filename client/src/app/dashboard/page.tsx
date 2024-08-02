@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 export default function Page() {
   const router = useRouter();
   const [user, setUser] = useState(null);
-
   useEffect(() => {
     async function getUserData() {
       const res = await fetch("http://localhost:9081/api/v1/user/getdata", {

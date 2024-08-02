@@ -4,6 +4,8 @@ export interface taskModel {
   priority: string;
   deadline: string;
   lastUpdated: string;
+  status?: string;
+  _id?: string;
 }
 
 interface tasksDataModel {

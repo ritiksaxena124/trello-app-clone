@@ -3,7 +3,7 @@ import CloseIcon from "@/assets/icons/closeIcon.svg";
 import FullScreenIcon from "@/assets/icons/fullScreenIcon.svg";
 import ShareIcon from "@/assets/icons/shareIcon.svg";
 import FavoriteIcon from "@/assets/icons/favoriteIcon.svg";
-import React, { SyntheticEvent, useState } from "react";
+import React, { useState } from "react";
 import {
   StatusIcon,
   PriorityIcon,
@@ -15,8 +15,10 @@ import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { toggleModal } from "@/lib/slices/taskModalSlice";
 import { TaskDetails } from "@/interfaces";
 import PriorityTag from "../PriorityTag";
+import { useRouter } from "next/navigation";
 
 export default function TaskModal() {
+  const router = useRouter();
   const [toggleDropdown, setToggleDropdown] = useState<{
     status: boolean;
     priority: boolean;
@@ -78,10 +80,9 @@ export default function TaskModal() {
     });
 
     const data = await res.json();
-    console.log(data);
+    dispatch(toggleModal());
   }
 
-  console.log(taskDetails);
 
   return (
     <>

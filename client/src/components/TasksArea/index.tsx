@@ -6,7 +6,6 @@ import { useAppDispatch } from "@/lib/hooks";
 import { toggleModal } from "@/lib/slices/taskModalSlice";
 
 export default function TasksArea({tasksData}) {
-  console.log(tasksData)
   const dispatch = useAppDispatch();
   function handleTaskModal() {
     dispatch(toggleModal());

@@ -5,5 +5,6 @@ import DescriptionIcon from "./descriptionIcon.svg";
 import PlusIcon from "./plusIcon.svg";
 import DropDownIcon from "./dropdownIcon.svg";
 import ClockIcon from "./clockIcon.svg";
+import DeleteIcon from "./DeleteIcon.js";
 
-export { ClockIcon, DropDownIcon, StatusIcon, PriorityIcon, CalendarIcon, DescriptionIcon, PlusIcon };
+export { ClockIcon, DropDownIcon, StatusIcon, PriorityIcon, CalendarIcon, DescriptionIcon, PlusIcon, DeleteIcon };

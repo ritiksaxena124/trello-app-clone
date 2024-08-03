@@ -12,7 +12,7 @@ const generateAccessAndRefreshToken = async (userId) => {
     const refreshToken = await user.generateRefreshToken();
 
     user.refreshToken = refreshToken;
-    await user.save();
+    await user.save({ validateBeforeSave: false });
 
     return { accessToken, refreshToken };
 }
@@ -84,8 +84,22 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 const logoutUser = asyncHandler(async (req, res) => {
-    res.clearCookie("token");
-    res.status(200).json(new ApiResponse(200, "User logged out successfully"));
+    await User.findByIdAndUpdate({ _id: req.user?._id }, {
+        $set: {
+            refreshToken: ""
+        }
+    }, { new: true })
+
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+    res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new ApiResponse(200, "User logged out successfully", {}));
 })
 
 const retrieveUserData = asyncHandler(async (req, res) => {

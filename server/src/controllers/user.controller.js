@@ -38,20 +38,22 @@ const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     // check if any user with the email recieved exists
-    const user = await User.findOne({ email });
+    const userExists = await User.findOne({ email });
 
-    if (!user) {
+    if (!userExists) {
         return res.status(401).json(new ApiResponse(401, "Incorrect credentials"));
     }
 
     // check if password recieved is correct
-    const isPasswordCorrect = await user.isPasswordCorrect(password);
+    const isPasswordCorrect = await userExists.isPasswordCorrect(password);
 
     if (!isPasswordCorrect) {
         return res.status(401).json(new ApiResponse(401, "Incorrect credentials"));
     }
 
-    res.status(201).json(new ApiResponse(201, "User logged in successfully"));
+    const user = await User.findById(userExists._id).select("-password");
+
+    res.status(201).json(new ApiResponse(201, "User logged in successfully", user));
 })
 
 const logoutUser = asyncHandler(async (req, res) => {

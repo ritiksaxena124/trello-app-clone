@@ -1,4 +1,4 @@
-import User from "../models/userModel";
+import User from "../models/userModel.js";
 
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -34,6 +34,29 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(201).json(new ApiResponse(201, "User registered successfully", createdUser));
 });
 
-export { registerUser };
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
 
+    // check if any user with the email recieved exists
+    const user = await User.findOne({ email });
 
+    if (!user) {
+        return res.status(401).json(new ApiResponse(401, "Incorrect credentials"));
+    }
+
+    // check if password recieved is correct
+    const isPasswordCorrect = await user.isPasswordCorrect(password);
+
+    if (!isPasswordCorrect) {
+        return res.status(401).json(new ApiResponse(401, "Incorrect credentials"));
+    }
+
+    res.status(201).json(new ApiResponse(201, "User logged in successfully"));
+})
+
+const logoutUser = asyncHandler(async (req, res) => {
+    res.clearCookie("token");
+    res.status(200).json(new ApiResponse(200, "User logged out successfully"));
+})
+
+export { registerUser, logoutUser, loginUser };

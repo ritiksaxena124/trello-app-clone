@@ -1,99 +1,13 @@
 import express from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../models/userModel.js";
-import { sampleData } from "../data/data.js";
-import { TasksData } from "../models/tasksModel.js";
+
+import { loginUser, logoutUser, registerUser } from "../controllers/user.controller.js";
 
 const router = express.Router();
 
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+router.route("/login").post(loginUser);
 
-  const user = await User.findOne({
-    email,
-  });
+router.route("/register").post(registerUser);
 
-  if (!user) {
-    return res.status(401).json({
-      message: "Incorrect credentials",
-      status: 401,
-    });
-  }
+router.route("/logout").get(logoutUser);
 
-  const blob = await bcrypt.compare(password, user.password);
-
-  if (!blob) {
-    return res.status(401).json({
-      message: "Incorrect credentials",
-      status: 401,
-    });
-  }
-
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
-  res.cookie("token", token, options);
-
-  res.status(201).json({
-    message: "User loggedIn",
-    status: 201,
-  });
-});
-
-router.post("/register", (req, res) => {
-  const { fullName, email, password } = req.body;
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) {
-      console.log("Error generating salt", err);
-      throw err;
-    }
-
-    bcrypt.hash(password, salt, async (err, result) => {
-      if (err) {
-        console.log("Error hashing password", err);
-        throw err;
-      }
-
-      const tasksData = await TasksData.insertMany(sampleData);
-
-      // logic to create a user in database goes here
-      const user = await User.create({
-        fullName,
-        email,
-        password: result,
-        tasksData: tasksData.map((tasks) => tasks._id),
-      });
-
-      if (!user) {
-        res.status(401).json({
-          message: "Unable to register user.",
-          status: 401,
-        });
-      }
-
-      // create a jwt token
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-
-      const options = {
-        httpOnly: true,
-        secure: true,
-      };
-      res.cookie("token", token, options);
-      res.status(201).json({
-        message: "User registered successfully!",
-        status: 201,
-      });
-    });
-  });
-});
-
-router.get("/logout", (req, res) => {
-  res.clearCookie("token");
-  res.json({ message: "Logged out successfully" });
-});
 export default router;

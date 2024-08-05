@@ -115,7 +115,7 @@ const retrieveUserData = asyncHandler(async (req, res) => {
 
     const user = await User.findById({
         _id: blob._id,
-    }).populate("tasksData").select("-password");
+    }).select("-password");
 
     if (!user) {
         res.status(500).json(new ApiError(500, "Failed to retrieve user data"));

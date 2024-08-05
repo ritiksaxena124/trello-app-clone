@@ -20,7 +20,8 @@ const taskSchema = mongoose.Schema(
       enum: ["Urgent", "Medium", "Low"],
     },
     userId: {
-      type: mongoose.Schema.Types.ObjectId("User")
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
     }
   },
   {

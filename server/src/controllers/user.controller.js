@@ -103,7 +103,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 })
 
 const retrieveUserData = asyncHandler(async (req, res) => {
-    const token = req.headers.cookie?.replace("token=", "");
+    const token = req.cookies?.accessToken;
     if (!token) {
         return res.status(401).json(new ApiError(401, "Unauthorized access"))
     }
@@ -114,7 +114,7 @@ const retrieveUserData = asyncHandler(async (req, res) => {
     }
 
     const user = await User.findById({
-        _id: blob.id,
+        _id: blob._id,
     }).populate("tasksData").select("-password");
 
     if (!user) {

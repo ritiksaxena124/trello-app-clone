@@ -11,23 +11,35 @@ export default function Page() {
   const [user, setUser] = useState(null);
   useEffect(() => {
     async function getUserData() {
-      const res = await fetch("http://localhost:9081/api/v1/user/getdata", {
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (data.status == 401) {
+      const result: Response = await fetch(
+        "http://localhost:9081/api/v1/user/getdata",
+        {
+          credentials: "include",
+        }
+      );
+
+      const user = await result.json();
+
+      if (user?.statusCode == 401) {
         return router.push("/login");
       }
-      if (data.status == 201) {
-        setUser(data.user);
+
+      if (user?.statusCode == 201) {
+        setUser(user?.data);
       }
     }
 
     getUserData();
   }, []);
 
+  console.log(user);
+
   if (!user) {
-    return;
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <h1 className="text-2xl font-semibold text-zinc-800">Loading..</h1>
+      </div>
+    );
   }
 
   return (

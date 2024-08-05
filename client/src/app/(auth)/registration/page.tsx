@@ -36,7 +36,7 @@ export default function Page() {
   }
 
   async function handleSubmit(values: FormFields) {
-    const res = await fetch("http://localhost:9081/api/v1/auth/register", {
+    const res = await fetch("http://localhost:9081/api/v1/user/register", {
       method: "POST",
       body: JSON.stringify(values, null, 2),
       credentials: "include",
@@ -45,7 +45,7 @@ export default function Page() {
       },
     });
     const data = await res.json();
-    if (data.status === 201) {
+    if (data.statusCode === 201) {
       router.push("/login");
     } else {
       router.push("/registration");

@@ -32,7 +32,7 @@ export default function Page() {
   }
 
   async function handleSubmit(values: FormFields) {
-    const res = await fetch("http://localhost:9081/api/v1/auth/login", {
+    const res = await fetch("http://localhost:9081/api/v1/user/login", {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(values, null, 2),

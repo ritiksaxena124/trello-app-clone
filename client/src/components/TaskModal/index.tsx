@@ -16,9 +16,9 @@ import { toggleModal } from "@/lib/slices/taskModalSlice";
 import { TaskDetails } from "@/interfaces";
 import PriorityTag from "../PriorityTag";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function TaskModal() {
-  const router = useRouter();
   const [toggleDropdown, setToggleDropdown] = useState<{
     status: boolean;
     priority: boolean;
@@ -83,7 +83,6 @@ export default function TaskModal() {
     dispatch(toggleModal());
   }
 
-
   return (
     <>
       <section
@@ -100,30 +99,53 @@ export default function TaskModal() {
         <div className="flex justify-between mb-6 items-center">
           <div className="flex items-center gap-3">
             <span onClick={closeTaskModal} className="cursor-pointer">
-              <img
+              <Image
                 src={CloseIcon?.src}
                 alt="close task modal"
                 className="w-8 h-8"
+                width={32}
+                height={32}
               />
             </span>
             <span className="cursor-pointer">
-              <img
+              <Image
                 src={FullScreenIcon?.src}
                 alt="close task modal"
                 className="w-8 h-8"
+                width={32}
+                height={32}
               />
             </span>
           </div>
           <div className="flex gap-3 items-center">
-            <div onClick={handleCreateTask} className="flex gap-2 items-center py-2 px-4 rounded-md cursor-pointer text-white bg-gradient-to-b from-[#3A3A3A] to-[#202020]">
+            <div
+              onClick={handleCreateTask}
+              className="flex gap-2 items-center py-2 px-4 rounded-md cursor-pointer text-white bg-gradient-to-b from-[#3A3A3A] to-[#202020]"
+            >
               <button>Create</button>
-              <img src={PlusIcon?.src} alt="create icon" className="invert" />
+              <Image
+                src={PlusIcon?.src}
+                alt="create icon"
+                className="invert"
+                width={32}
+                height={32}
+              />
             </div>
             <div className="flex gap-2 items-center bg-[#f3f3f3] py-2 px-4 rounded-md text-[#666] cursor-pointer">
-              <img src={ShareIcon?.src} alt="share icon" />
+              <Image
+                src={ShareIcon?.src}
+                alt="share icon"
+                width={32}
+                height={32}
+              />
             </div>
             <div className="flex gap-2 items-center bg-[#f3f3f3] py-2 px-4 rounded-md text-[#666] cursor-pointer">
-              <img src={FavoriteIcon?.src} alt="share icon" />
+              <Image
+                src={FavoriteIcon?.src}
+                alt="share icon"
+                width={32}
+                height={32}
+              />
             </div>
           </div>
         </div>
@@ -139,7 +161,13 @@ export default function TaskModal() {
           {/* Status */}
           <div className="flex items-center">
             <div className="flex grow items-center gap-2 text-[#666]">
-              <img src={StatusIcon?.src} alt="" className="w-6 h-6" />
+              <Image
+                src={StatusIcon?.src}
+                alt=""
+                className="w-6 h-6"
+                width={32}
+                height={32}
+              />
               <span className="text-base">Status</span>
             </div>
 
@@ -203,7 +231,13 @@ export default function TaskModal() {
           {/* Priority */}
           <div className="flex items-center">
             <div className="flex grow items-center gap-2 text-[#666]">
-              <img src={PriorityIcon?.src} alt="" className="w-6 h-6" />
+              <Image
+                src={PriorityIcon?.src}
+                alt=""
+                className="w-6 h-6"
+                width={32}
+                height={32}
+              />
               <span className="text-base">Priority</span>
             </div>
 
@@ -254,15 +288,33 @@ export default function TaskModal() {
           </div>
 
           <div className="flex items-center gap-2 text-[#666]">
-            <img src={CalendarIcon?.src} alt="" className="w-6 h-6" />
+            <Image
+              src={CalendarIcon?.src}
+              alt=""
+              className="w-6 h-6"
+              width={32}
+              height={32}
+            />
             <span className="text-base">Deadline</span>
           </div>
           <div className="flex items-center gap-2 text-[#666]">
-            <img src={DescriptionIcon?.src} alt="" className="w-6 h-6" />
+            <Image
+              src={DescriptionIcon?.src}
+              alt=""
+              className="w-6 h-6"
+              width={32}
+              height={32}
+            />
             <span className="text-base">Description</span>
           </div>
           <div className="flex items-center gap-2 text-zinc-800">
-            <img src={PlusIcon?.src} alt="" className="w-6 h-6" />
+            <Image
+              src={PlusIcon?.src}
+              alt=""
+              className="w-6 h-6"
+              width={32}
+              height={32}
+            />
             <span className="text-base">Add custom property</span>
           </div>
         </div>

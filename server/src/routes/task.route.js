@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/create", async (req, res) => {
     const { title, description, status, priority } = req.body;
-    const token = req.headers.cookie?.replace("token=", "");
+    const token = req.cookies?.accessToken;
     const blob = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ _id: blob.id });
 

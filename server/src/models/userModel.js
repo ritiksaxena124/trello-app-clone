@@ -19,12 +19,6 @@ const userSchema = mongoose.Schema({
   refreshToken: {
     type: String
   },
-  tasksData: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "TasksData",
-    },
-  ],
 });
 
 

@@ -15,7 +15,6 @@ import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { toggleModal } from "@/lib/slices/taskModalSlice";
 import { TaskDetails } from "@/interfaces";
 import PriorityTag from "../PriorityTag";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function TaskModal() {

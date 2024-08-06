@@ -10,6 +10,7 @@ export default function TasksArea({tasksData}) {
   function handleTaskModal() {
     dispatch(toggleModal());
   }
+
   return (
     <div className="mt-6 rounded-lg bg-white w-full p-4 flex gap-6">
       {tasksData.map((tasks) => (
@@ -24,10 +25,11 @@ export default function TasksArea({tasksData}) {
           <div className="space-y-4">
             <TaskList tasksList={tasks.tasks} />
             {/* Button to create new task */}
-            <div onClick={handleTaskModal} className="flex justify-between items-center text-white bg-gradient-to-b from-[#3A3A3A] to-[#202020] p-3 rounded-md mt-4 cursor-pointer">
-              <button className="text-white">
-                Add new
-              </button>
+            <div
+              onClick={handleTaskModal}
+              className="flex justify-between items-center text-white bg-gradient-to-b from-[#3A3A3A] to-[#202020] p-3 rounded-md mt-4 cursor-pointer"
+            >
+              <button className="text-white">Add new</button>
               <img src={PlusIcon?.src} alt="plus icon" className="invert" />
             </div>
           </div>

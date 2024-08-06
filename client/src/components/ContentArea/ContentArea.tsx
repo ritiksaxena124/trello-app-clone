@@ -48,7 +48,7 @@ export default function ContentArea({user}) {
   return (
     <div className="w-full p-8 relative">
       <div className="flex justify-between items-center">
-        <h1 className="text-[48px] font-semibold">Good morning, {user?.fullName.split(" ")[0]}!</h1>
+        <h1 className="text-[48px] font-semibold">Good morning, {user?.fullName?.split(" ")[0]}!</h1>
         <div className="flex gap-2 items-center">
           <span>Help & feedback</span>
           <img src={HelpIcon?.src} alt="help icon" />
@@ -102,7 +102,7 @@ export default function ContentArea({user}) {
           <PrimaryBtn onClick={handleTaskModal} title="Create new" type="button" icon={CreateTaskIcon} />
         </div>
       </div>
-      <TasksArea tasksData = {user.tasksData}/>
+      <TasksArea tasksData={user?.allTasks}/>
     </div>
   );
 }

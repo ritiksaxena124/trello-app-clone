@@ -32,8 +32,6 @@ export default function Page() {
     getUserData();
   }, []);
 
-  console.log(user);
-
   if (!user) {
     return (
       <div className="w-full h-screen flex items-center justify-center">

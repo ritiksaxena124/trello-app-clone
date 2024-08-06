@@ -21,11 +21,12 @@ export default function Sidebar() {
   const dispatch = useAppDispatch();
 
   async function handleLogout() {
-    localStorage.removeItem("token");
-    const res = await fetch("http://localhost:9081/api/v1/auth/logout", {
+    console.log("clicked")
+    const res = await fetch("http://localhost:9081/api/v1/user/logout", {
       credentials: "include",
     });
-
+    const data = await res.json();
+    console.log(data);
     router.push("/login");
   }
 

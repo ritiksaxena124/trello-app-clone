@@ -103,24 +103,99 @@ const logoutUser = asyncHandler(async (req, res) => {
 })
 
 const retrieveUserData = asyncHandler(async (req, res) => {
-    const token = req.cookies?.accessToken;
-    if (!token) {
-        return res.status(401).json(new ApiError(401, "Unauthorized access"))
-    }
-    const blob = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (!blob) {
-        return res.status(401).json(new ApiError(401, "Unauthorized access"))
-    }
-
-    const user = await User.findById({
-        _id: blob._id,
-    }).select("-password");
+    const user = await User.aggregate(
+        [
+            {
+                $match: {
+                    _id: req.user?._id
+                }
+            },
+            {
+                $lookup: {
+                    from: "tasks",
+                    localField: "_id",
+                    foreignField: "userId",
+                    as: "tasks"
+                }
+            },
+            {
+                $project: {
+                    todoTasks: {
+                        $filter: {
+                            input: "$tasks",
+                            as: "task",
+                            cond: {
+                                $eq: ["$$task.status", "Todo"]
+                            }
+                        }
+                    },
+                    inProgressTasks: {
+                        $filter: {
+                            input: "$tasks",
+                            as: "task",
+                            cond: {
+                                $eq: ["$$task.status", "In Progress"]
+                            }
+                        }
+                    },
+                    underReviewTasks: {
+                        $filter: {
+                            input: "$tasks",
+                            as: "task",
+                            cond: {
+                                $eq: ["$$task.status", "Under Review"]
+                            }
+                        }
+                    },
+                    finishedTasks: {
+                        $filter: {
+                            input: "$tasks",
+                            as: "task",
+                            cond: {
+                                $eq: ["$$task.status", "Finished"]
+                            }
+                        }
+                    },
+                }
+            },
+            {
+                $set: {
+                    allTasks:
+                        [
+                            {
+                                "status": "todo",
+                                "tasks": "$todoTasks"
+                            },
+                            {
+                                "status": "inProgress",
+                                "tasks": "$inProgressTasks"
+                            },
+                            {
+                                "status": "underReview",
+                                "tasks": "$underReviewTasks"
+                            },
+                            {
+                                "status": "finished",
+                                "tasks": "$finishedTasks"
+                            },
+                        ]
+                }
+            },
+            {
+                $project: {
+                    fullName: 1,
+                    email: 1,
+                    allTasks: 1
+                }
+            }
+        ]
+    )
 
     if (!user) {
         res.status(500).json(new ApiError(500, "Failed to retrieve user data"));
     }
-    res.status(201).json(new ApiResponse(201, "User data retrieved successfully", user));
+    res.status(201).json(new ApiResponse(201, "User data retrieved successfully", user[0]));
 })
 
 export { registerUser, logoutUser, loginUser, retrieveUserData };

@@ -164,19 +164,19 @@ const retrieveUserData = asyncHandler(async (req, res) => {
                     allTasks:
                         [
                             {
-                                "status": "todo",
+                                "status": "Todo",
                                 "tasks": "$todoTasks"
                             },
                             {
-                                "status": "inProgress",
+                                "status": "In Progress",
                                 "tasks": "$inProgressTasks"
                             },
                             {
-                                "status": "underReview",
+                                "status": "Under Review",
                                 "tasks": "$underReviewTasks"
                             },
                             {
-                                "status": "finished",
+                                "status": "Finished",
                                 "tasks": "$finishedTasks"
                             },
                         ]

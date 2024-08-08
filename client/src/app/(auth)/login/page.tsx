@@ -42,7 +42,7 @@ export default function Page() {
     });
 
     const data = await res.json();
-    if (data.status == 401) {
+    if (!data?.success) {
       alert("Invalid credentials");
     } else {
       router.push("/dashboard");

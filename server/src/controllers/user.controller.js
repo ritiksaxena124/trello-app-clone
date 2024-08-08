@@ -120,7 +120,7 @@ const retrieveUserData = asyncHandler(async (req, res) => {
                 }
             },
             {
-                $project: {
+                $addFields: {
                     todoTasks: {
                         $filter: {
                             input: "$tasks",
@@ -191,7 +191,7 @@ const retrieveUserData = asyncHandler(async (req, res) => {
             }
         ]
     )
-
+    
     if (!user) {
         res.status(500).json(new ApiError(500, "Failed to retrieve user data"));
     }

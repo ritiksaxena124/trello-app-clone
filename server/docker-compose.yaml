@@ -13,5 +13,7 @@ services:
       - db
     ports:
       - "9081:9081"
+    volumes:
+      - ./src:/app/src
     environment:
       MONGODB_URI: "mongodb://mongodb:27017/trello-app"

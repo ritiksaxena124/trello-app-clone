@@ -20,11 +20,11 @@ export default function Page() {
 
       const user = await result.json();
 
-      if (user?.statusCode == 401) {
+      if (!user?.success) {
+        alert("You are not authorized to view this page");
         return router.push("/login");
       }
-
-      if (user?.statusCode == 201) {
+      else {
         setUser(user?.data);
       }
     }

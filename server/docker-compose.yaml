@@ -1,0 +1,17 @@
+name: backend_app
+version: 1.0.0
+services:
+  db:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+  backend:
+    build: .
+    container_name: backend
+    depends_on:
+      - db
+    ports:
+      - "9081:9081"
+    environment:
+      MONGODB_URI: "mongodb://mongodb:27017/trello-app"

@@ -1,22 +1,22 @@
 "use client"
-import CloseIcon from "@/assets/icons/closeIcon.svg"
-import FullScreenIcon from "@/assets/icons/fullScreenIcon.svg"
-import ShareIcon from "@/assets/icons/shareIcon.svg"
-import FavoriteIcon from "@/assets/icons/favoriteIcon.svg"
-import React, { useState } from "react"
+import CloseIcon from "@/assets/icons/closeIcon.svg";
+import FullScreenIcon from "@/assets/icons/fullScreenIcon.svg";
+import ShareIcon from "@/assets/icons/shareIcon.svg";
+import FavoriteIcon from "@/assets/icons/favoriteIcon.svg";
+import React, { useState } from "react";
 import {
 	StatusIcon,
 	PriorityIcon,
 	DescriptionIcon,
 	CalendarIcon,
 	PlusIcon,
-} from "@/assets/icons"
-import { useAppSelector, useAppDispatch } from "@/lib/hooks"
-import { toggleModal } from "@/lib/slices/taskModalSlice"
-import { TaskDetails } from "@/interfaces"
-import PriorityTag from "../PriorityTag"
-import Image from "next/image"
-import toast from "react-hot-toast"
+} from "@/assets/icons";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { toggleModal } from "@/lib/slices/taskModalSlice";
+import { TaskDetails } from "@/interfaces";
+import PriorityTag from "../PriorityTag";
+import Image from "next/image";
+import toast from "react-hot-toast";
 
 export default function TaskModal() {
 	const [toggleDropdown, setToggleDropdown] = useState<{
@@ -33,17 +33,17 @@ export default function TaskModal() {
 		priority: "Low",
 	})
 
-	const dispatch = useAppDispatch()
-	const isOpen = useAppSelector((store) => store.taskModal.isOpen)
+	const dispatch = useAppDispatch();
+	const isOpen = useAppSelector((store) => store.taskModal.isOpen);
 
 	function closeTaskModal() {
-		dispatch(toggleModal())
+		dispatch(toggleModal());
 	}
 	function handleToggleDropdown(element: keyof typeof toggleDropdown) {
 		setToggleDropdown((prev) => ({
 			...prev,
 			[element]: !prev[element],
-		}))
+		}));
 	}
 
 	function handleTaskDetails(
@@ -54,13 +54,13 @@ export default function TaskModal() {
 		setTaskDetails((prev) => ({
 			...prev,
 			[name]: value ? value : e.target.value,
-		}))
+		}));
 
 		if (name == "status" || name == "priority") {
 			setToggleDropdown(() => ({
 				status: false,
 				priority: false,
-			}))
+			}));
 		}
 	}
 
@@ -77,13 +77,13 @@ export default function TaskModal() {
 			headers: {
 				"Content-Type": "application/json",
 			},
-		})
+		});
 
-		const data = await res.json()
+		const data = await res.json();
 		if (data.success) {
-			toast.success("Task created successfully")
+			toast.success("Task created successfully");
 		} else {
-			toast.error(data.message)
+			toast.error(data.message);
 		}
 		dispatch(toggleModal())
 	}

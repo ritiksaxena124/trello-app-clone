@@ -16,6 +16,7 @@ import { toggleModal } from "@/lib/slices/taskModalSlice";
 import { TaskDetails } from "@/interfaces";
 import PriorityTag from "../PriorityTag";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 export default function TaskModal() {
   const [toggleDropdown, setToggleDropdown] = useState<{
@@ -79,6 +80,11 @@ export default function TaskModal() {
     });
 
     const data = await res.json();
+	if(data.success) {
+		toast.success("Task created successfully");
+	} else {
+		toast.error(data.message);
+	}
     dispatch(toggleModal());
   }
 

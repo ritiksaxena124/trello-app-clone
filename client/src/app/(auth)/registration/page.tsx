@@ -5,7 +5,8 @@ import Gradient from "@/../public/circuit-board.svg";
 
 import { useRouter } from "next/navigation";
 import { PrimaryBtn } from "@/components/Button";
-import { Formik, Form, useFormik } from "formik";
+import { Formik, Form } from "formik";
+import { useState } from "react";
 
 interface FormFields {
   fullName?: string;
@@ -15,6 +16,7 @@ interface FormFields {
 
 export default function Page() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const initialValues: FormFields = {
     fullName: "",
     email: "",
@@ -39,6 +41,7 @@ export default function Page() {
   }
 
   async function handleSubmit(values: FormFields) {
+    setLoading(true);
     const res = await fetch("http://localhost:9081/api/v1/user/register", {
       method: "POST",
       body: JSON.stringify(values, null, 2),
@@ -49,6 +52,7 @@ export default function Page() {
     });
     const data = await res.json();
     if (data.statusCode === 201) {
+      setLoading(false);
       router.push("/login");
     } else {
       router.push("/registration");
@@ -56,36 +60,6 @@ export default function Page() {
   }
 
   return (
-    // <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-[#AFA3FF]">
-    //   <div className="max-w-lg w-full bg-slate-50 rounded-lg border border-zinc-300 p-8 space-y-8">
-    //     <h1 className="text-3xl text-[#2d2d2d] text-center font-semibold">
-    //       Welcome to <span className="text-[#4534AC]">Workflo</span>!
-    //     </h1>
-    //     <Formik
-    //       initialValues={initialValues}
-    //       validate={(values) => handleValidate(values)}
-    //       onSubmit={(values, actions) => {
-    //         handleSubmit(values);
-    //         actions.setSubmitting(false);
-    //       }}
-    //     >
-    //       <Form>
-    //         <FormField type="text" name="fullName" placeholder="Full name" />
-    //         <FormField type="email" name="email" placeholder="Your email" />
-    //         <FormField type="password" name="password" placeholder="Password" />
-    //         <PrimaryBtn type="submit" title="Signup" />
-    //       </Form>
-    //     </Formik>
-    //     <p className="text-center text-[#606060]">
-    //       Already have an account?
-    //       <a href="/login" className="text-blue-700 cursor-pointer">
-    //         Login
-    //       </a>
-    //       .
-    //     </p>
-    //   </div>
-    // </div>
-
     <div className="w-full min-h-screen h-screen px-4 lg:px-0 bg-zinc-950 flex">
       <div className="w-full flex items-center justify-center lg:w-2/3 h-full bg-zinc-950 rounded-lg p-4 lg:p-16 space-y-8">
         <div className="max-w-lg w-full h-full flex flex-col justify-center items-center gap-8">
@@ -117,7 +91,7 @@ export default function Page() {
                   name="password"
                   placeholder="Password"
                 />
-                <PrimaryBtn type="submit" title="Signup" />
+                <PrimaryBtn type="submit" title="Signup" loading={loading} />
               </Form>
             </Formik>
           </div>

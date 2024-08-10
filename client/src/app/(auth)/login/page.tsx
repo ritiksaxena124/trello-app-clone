@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useRouter } from "next/navigation";
 import Gradient from "@/../public/circuit-board.svg";
 import Image from "next/image";
+import { useState } from "react";
 
 interface FormFields {
   email?: string;
@@ -13,6 +14,7 @@ interface FormFields {
 
 export default function Page() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false); 
 
   const initialValues: FormFields = {
     email: "",
@@ -34,6 +36,7 @@ export default function Page() {
   }
 
   async function handleSubmit(values: FormFields) {
+    setLoading(true);
     const res = await fetch("http://localhost:9081/api/v1/user/login", {
       method: "POST",
       credentials: "include",
@@ -47,6 +50,7 @@ export default function Page() {
     if (!data?.success) {
       alert("Invalid credentials");
     } else {
+      setLoading(false);
       router.push("/dashboard");
     }
   }
@@ -78,7 +82,7 @@ export default function Page() {
                   name="password"
                   placeholder="Password"
                 />
-                <PrimaryBtn type="submit" title="Login" />
+                <PrimaryBtn type="submit" title="Login" loading={loading}/>
               </Form>
             </Formik>
           </div>
